@@ -1,20 +1,14 @@
 import React from 'react';
 
 import './App.css';
+import LgEntrance from "./LgEntrance";
 
-import LgOperatePanel from "./LgOperatePanel";
-import LgEvolutionPanel from "./LgEvolutionPanel";
 
 function App() {
   return (
     <div className="App">
       <h1 style={{textAlign:'center'}}>生命游戏</h1>
-      <div className="operateP">
-        <LgOperatePanel/>
-      </div>
-      <div className="evolutionP">
-        <LgEvolutionPanel/>
-      </div>
+      <LgEntrance/>
     </div>
   );
 }
