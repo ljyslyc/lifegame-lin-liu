@@ -13,11 +13,11 @@ class LgOperatePanel extends Component{
     }
     handleClick_runButton=()=>{
         this.setState({isGameRunning:true});
-        this.props.runG();
+        this.props.runGame();
     };
     handleClick_stopButton=()=>{
         this.setState({isGameRunning:false});
-        this.props.stopG();
+        this.props.stopGame();
     };
     render() {
         const {isGameRunning} =this.state;

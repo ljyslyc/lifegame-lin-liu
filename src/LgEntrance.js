@@ -24,8 +24,8 @@
                      style={{textAlign:'center'}}
                  >
                      <LgOperatePanel
-                         runG={this.runGame}
-                         stopG={this.stopGame}
+                         runGame={this.runGame}
+                         stopGame={this.stopGame}
                      />
                  </div>
                  <div
