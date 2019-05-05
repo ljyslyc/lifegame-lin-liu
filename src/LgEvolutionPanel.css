@@ -2,8 +2,9 @@
 .deadCell{
     background-color:black;
 }
-.aliveCell{
-    background-color:white;
+.aliveCell {
+    background-color: white;
+}
 =======
 .Board {
     position: relative;
