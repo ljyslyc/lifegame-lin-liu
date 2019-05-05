@@ -1,0 +1,6 @@
+.deadCell{
+    background-color:black;
+}
+.aliveCell{
+    background-color:white;
+}

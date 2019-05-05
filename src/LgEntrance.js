@@ -4,6 +4,18 @@
 
 
  class LgEntrance extends Component{
+     constructor(props){
+         super(props);
+         this.state={
+
+         }
+     }
+     runGame=()=>{
+
+     };
+     stopGame=()=>{
+
+     };
      render() {
          return(
              <div>
@@ -11,7 +23,10 @@
                      className="operateP"
                      style={{textAlign:'center'}}
                  >
-                     <LgOperatePanel/>
+                     <LgOperatePanel
+                         runG={this.runGame}
+                         stopG={this.stopGame}
+                     />
                  </div>
                  <div
                      className="evolutionP"
