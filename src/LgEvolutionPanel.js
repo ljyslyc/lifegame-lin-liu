@@ -1,15 +1,16 @@
-import React,{Component} from 'react'
-import 'LgEvolutionPanel.css'
+import React,{Component,Fragment} from 'react'
+
+import PropTypes from 'prop-types'
 
 const CELL_SIZE = 20;
-const WIDTH = 800;
-const HEIGHT = 600;
+// const WIDTH = 800;
+// const HEIGHT = 600;
 
 class LgCell extends  Component{
     constructor(props){
         super(props);
         this.state={
-            isAlive:0,  //0：死亡，1:活着
+            isAlive:0,      //0：死亡，1:活着
         }
     }
     /*当细胞被点击时，切换它的状态*/
@@ -26,44 +27,113 @@ class LgCell extends  Component{
     set_nextCellState=(nextCellState=0)=>{
         this.setState({isAlive:nextCellState});
     };
-    render() {
+    switch_cell=()=>{
         const {isAlive}=this.state;
-        const { x, y } = this.props;
+        const { x, y } = this.props;                    //x - column, y - row
+        let left=CELL_SIZE * x + 1;
+        let top=CELL_SIZE * y + 1;
+        return (
+            //根据细胞生死来render细胞的颜色
+            isAlive===0?
+                <div
+                    className={"deadCell"}
+                    onClick={this.handleClick}
+                    style={{
+                        backgroundColor:"#DCDCDC",
+                        left: left,     //定义了一个定位元素的上外边距边界与其包含块上边界之间的偏移
+                        top: top,       //定义了定位元素左外边距边界与其包含块左边界之间的偏移
+                        width: 19,
+                        height: 19,
+                        position:"absolute",
+                        display:"inline",
+                    }}
+                />
+                :
+                <div
+                    className={"aliveCell"}
+                    onClick={this.handleClick}
+                    style={{
+                        backgroundColor:"#00BFFF",
+                        left: `${left}px`,     //定义了一个定位元素的上外边距边界与其包含块上边界之间的偏移
+                        top: `${top}px`,       //定义了定位元素左外边距边界与其包含块左边界之间的偏移
+                        width: 19,
+                        height: 19,
+                        position:"absolute",
+                        display:"inline",
+                    }}
+                />
+        )
+    };
+    render() {
         return(
-            <div
-                onClick={this.handleClick}
-                style={{
-                    left: `${CELL_SIZE * x + 1}px`,
-                    top: `${CELL_SIZE * y + 1}px`,
-                    width: `${CELL_SIZE - 1}px`,
-                    height: `${CELL_SIZE - 1}px`,
-                }}
-            >
-                {
-                    //根据细胞生死来render
-                    isAlive===0?
-                        <div className={"deadCell"}/>
-                            :
-                        <div className={"aliveCell"}/>
-                }
-            </div>
+            <Fragment>
+                {this.switch_cell()}
+            </Fragment>
         );
     }
 }
+
 class LgEvolutionPanel extends Component{
     constructor(props){
         super(props);
         this.state={
-            cells:[],   //二维数组，保存细胞状态
+            cells_onBoard:[],
+        };
+    }
+
+    componentWillUpdate(nextProps, nextState, nextContext) {
+        if(this.props!==nextProps){
+            let temp_array=[];
+
+            let rowNum=this.props.sideRow/CELL_SIZE;
+            let columnNum=this.props.sideColumn/CELL_SIZE;
+            for(let r=0;r<rowNum;r++){
+                for(let c=0;c<columnNum;c++){
+                    temp_array.push({c,r});
+                }
+            }
+
+            this.setState({cells_onBoard:temp_array},()=>{
+                console.log("cells has been updated in LgEvolutionPanel");
+            })
         }
     }
+
     render() {
+        const {sideRow,sideColumn}=this.props;
+        const cells=this.state.cells_onBoard;
         return(
-          <div>
-              {"this is LgEvolutionPanel"}
-          </div>
+            <Fragment>
+                <div
+                    className={"gameBoard"}
+                    style={{
+                        position:"relative",
+                        width: sideColumn,
+                        height: sideRow,
+                        margin:"auto",
+                    }}
+                >
+                    {
+                        cells.map(cell =>
+                            <LgCell x={cell.c} y={cell.r} key={`${cell.c},${cell.r}`}/>
+                        )
+                    }
+                </div>
+                <div
+                    style={{textAlign:"center",}}
+                >
+                    <br/>
+                    <span>sideRow:{sideRow}</span>
+                    <br/>
+                    <span>sideColumn:{sideColumn}</span>
+                </div>
+            </Fragment>
         );
     }
 }
+
+LgEvolutionPanel.propTyps={
+    cells:PropTypes.array.isRequired,
+};
 
 export default LgEvolutionPanel;
