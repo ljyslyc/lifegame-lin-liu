@@ -12,6 +12,7 @@ class LgOperatePanel extends Component{
         };
         this.setSide=this.props.setSide;        //useless
         this.initEmpty=this.props.initEmpty;    //useless
+        this.initRandom=this.props.initRandom;  //useless
     }
 
 
@@ -80,9 +81,16 @@ class LgOperatePanel extends Component{
                 <Button
                     type="default"
                     onClick={this.props.initEmpty}
-                    style={{marginLeft:20}}
+                    style={{marginLeft:20,width:60}}
                 >
                     Clear
+                </Button>
+                <Button
+                    type="default"
+                    onClick={this.props.initRandom}
+                    style={{marginLeft:20}}
+                >
+                    Random
                 </Button>
             </div>
         );

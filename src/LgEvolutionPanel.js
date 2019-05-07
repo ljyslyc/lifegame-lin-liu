@@ -20,7 +20,7 @@ class LgCell extends  Component{
         }else if(this.state.isAlive===1){
             this.set_nextCellState(0);
         }else{
-            console.log("error - LgEvolutionPanel:changeCellState");
+            console.log("error - LgEvolutionPanel:changeCellState",this.state.isAlive);
         }
     };
     /*根据参数，切换细胞的状态*/
@@ -39,7 +39,7 @@ class LgCell extends  Component{
                     className={"deadCell"}
                     onClick={this.handleClick}
                     style={{
-                        backgroundColor:"#DCDCDC",
+                        backgroundColor:"#E7E7E7",
                         left: left,     //定义了一个定位元素的上外边距边界与其包含块上边界之间的偏移
                         top: top,       //定义了定位元素左外边距边界与其包含块左边界之间的偏移
                         width: 19,
@@ -53,7 +53,7 @@ class LgCell extends  Component{
                     className={"aliveCell"}
                     onClick={this.handleClick}
                     style={{
-                        backgroundColor:"#00BFFF",
+                        backgroundColor:"#1890FF",
                         left: `${left}px`,     //定义了一个定位元素的上外边距边界与其包含块上边界之间的偏移
                         top: `${top}px`,       //定义了定位元素左外边距边界与其包含块左边界之间的偏移
                         width: 19,
@@ -64,6 +64,11 @@ class LgCell extends  Component{
                 />
         )
     };
+    componentWillMount() {
+        const isA=this.props.isA;
+        this.setState({isAlive:isA});
+    }
+
     render() {
         return(
             <Fragment>
@@ -81,20 +86,54 @@ class LgEvolutionPanel extends Component{
         };
     }
 
+    componentWillMount() {
+        let temp_array=[];
+        let isA=0;
+
+        let rowNum=this.props.sideRow/CELL_SIZE;
+        let columnNum=this.props.sideColumn/CELL_SIZE;
+        for(let r=0;r<rowNum;r++){
+            for(let c=0;c<columnNum;c++){
+                //cells的值 类型为boolean
+                if(!this.props.cells[r][c]){
+                    isA=0;
+                }else {
+                    isA=1;
+                }
+                temp_array.push({c,r,isA});
+            }
+        }
+
+        this.setState({cells_onBoard:temp_array},()=>{
+            console.log("LgEvolutionPanel:cells initial - ",this.props.sideRow,"×",this.props.sideColumn);
+        })
+    }
+
     componentWillUpdate(nextProps, nextState, nextContext) {
+        //执行时，还未更新成nextProps
         if(this.props!==nextProps){
             let temp_array=[];
+            let isA=0;
 
-            let rowNum=this.props.sideRow/CELL_SIZE;
-            let columnNum=this.props.sideColumn/CELL_SIZE;
+            let rowNum=nextProps.sideRow/CELL_SIZE;
+            let columnNum=nextProps.sideColumn/CELL_SIZE;
+
+
             for(let r=0;r<rowNum;r++){
                 for(let c=0;c<columnNum;c++){
-                    temp_array.push({c,r});
+                    //cells的值 类型为boolean
+                    if(!nextProps.cells[r][c]){
+                        isA=0;
+                    }else {
+                        isA=1;
+                    }
+                    temp_array.push({c,r,isA});
                 }
             }
 
             this.setState({cells_onBoard:temp_array},()=>{
-                console.log("cells has been updated in LgEvolutionPanel");
+                console.log("LgEvolutionPanel:cells updated - ",this.props.sideRow,"×",this.props.sideColumn,"(now Props)");
+                console.log("LgEvolutionPanel:cells updated - ",nextProps.sideRow,"×",nextProps.sideColumn,"(next Props)");
             })
         }
     }
@@ -114,8 +153,14 @@ class LgEvolutionPanel extends Component{
                     }}
                 >
                     {
+                        /*根据cells一维数组渲染棋盘*/
                         cells.map(cell =>
-                            <LgCell x={cell.c} y={cell.r} key={`${cell.c},${cell.r}`}/>
+                            <LgCell
+                                x={cell.c}
+                                y={cell.r}
+                                isA={cell.isA}
+                                key={`${cell.c},${cell.r}`}
+                            />
                         )
                     }
                 </div>

@@ -15,7 +15,7 @@
      constructor(props){
          super(props);
          this.state={
-             cells:[],          //二维数组，保存细胞状态
+             cells:[],          //二维数组，保存细胞状态，以true/false
              sideRow:600,       //棋盘的纵高
              sideColumn:800,    //棋盘的横宽
          };
@@ -72,15 +72,18 @@
     //     }
     //     return temp_array;
     // };
-     /*设置棋盘边长*/
-     set_sideLength=(nextSide_row,nextSide_column)=>{
-         this.setState({
-             sideRow:nextSide_row,
-             sideColumn:nextSide_column,
-         });
-     };
+    /*设置棋盘边长*/
+    set_sideLength=(nextSide_row,nextSide_column)=>{
+        this.setState({
+            sideRow:nextSide_row,
+            sideColumn:nextSide_column,
+        });
+    };
+    componentWillMount() {
+        this.initCells_random();
+    }
 
-     render() {
+    render() {
          return(
              <div>
                  <div
@@ -92,6 +95,7 @@
                          stopGame={this.stopGame}
                          setSide={this.set_sideLength}
                          initEmpty={this.initCells_empty}
+                         initRamdom={this.initCells_random}
                      />
                  </div>
                  <br/>
