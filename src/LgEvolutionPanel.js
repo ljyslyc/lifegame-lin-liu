@@ -11,14 +11,17 @@ class LgCell extends  Component{
         super(props);
         this.state={
             isAlive:0,      //0：死亡，1:活着
-        }
+        };
+        this.flipState=this.props.flipState;    //useless
     }
     /*当细胞被点击时，切换它的状态*/
     handleClick=()=>{
         if(this.state.isAlive===0){
             this.set_nextCellState(1);
+            this.props.flipState(this.props.x,this.props.y);
         }else if(this.state.isAlive===1){
             this.set_nextCellState(0);
+            this.props.flipState(this.props.x,this.props.y);
         }else{
             console.log("error - LgEvolutionPanel:changeCellState",this.state.isAlive);
         }
@@ -68,6 +71,12 @@ class LgCell extends  Component{
         const isA=this.props.isA;
         this.setState({isAlive:isA});
     }
+    componentWillUpdate(nextProps, nextState, nextContext) {
+        if(this.props!==nextProps){
+            const isA=nextProps.isA;
+            this.setState({isAlive:isA});
+        }
+    }
 
     render() {
         return(
@@ -84,6 +93,7 @@ class LgEvolutionPanel extends Component{
         this.state={
             cells_onBoard:[],
         };
+        this.flipCellState=this.props.flipCellState;    //useless
     }
 
     componentWillMount() {
@@ -118,6 +128,8 @@ class LgEvolutionPanel extends Component{
             let rowNum=nextProps.sideRow/CELL_SIZE;
             let columnNum=nextProps.sideColumn/CELL_SIZE;
 
+            /*console.log("LgEvolutionPanel:this.props - ",this.props,"(now Props)");
+            console.log("LgEvolutionPanel:nextProps - ",nextProps,"(next Props)");*/
 
             for(let r=0;r<rowNum;r++){
                 for(let c=0;c<columnNum;c++){
@@ -131,16 +143,13 @@ class LgEvolutionPanel extends Component{
                 }
             }
 
-            this.setState({cells_onBoard:temp_array},()=>{
-                console.log("LgEvolutionPanel:cells updated - ",this.props.sideRow,"×",this.props.sideColumn,"(now Props)");
-                console.log("LgEvolutionPanel:cells updated - ",nextProps.sideRow,"×",nextProps.sideColumn,"(next Props)");
-            })
+            this.setState({cells_onBoard:temp_array});
         }
     }
 
     render() {
-        const {sideRow,sideColumn}=this.props;
-        const cells=this.state.cells_onBoard;
+        let {sideRow,sideColumn}=this.props;
+        let cells_onBoard=this.state.cells_onBoard;
         return(
             <Fragment>
                 <div
@@ -152,25 +161,28 @@ class LgEvolutionPanel extends Component{
                         margin:"auto",
                     }}
                 >
+                    {console.log("LgEvolutionPanel.render前(state,props) ",this.state,this.props)}
                     {
                         /*根据cells一维数组渲染棋盘*/
-                        cells.map(cell =>
+                        cells_onBoard.map(cell =>
                             <LgCell
                                 x={cell.c}
                                 y={cell.r}
                                 isA={cell.isA}
                                 key={`${cell.c},${cell.r}`}
+                                flipState={this.props.flipCellState}
                             />
                         )
                     }
+                    {console.log("LgEvolutionPanel.render后(state,props) ",this.state,this.props)}
                 </div>
                 <div
                     style={{textAlign:"center",}}
                 >
                     <br/>
-                    <span>sideRow:{sideRow}</span>
+                    <span>sideRow-{sideRow}</span>
                     <br/>
-                    <span>sideColumn:{sideColumn}</span>
+                    <span>sideColumn-{sideColumn}</span>
                 </div>
             </Fragment>
         );

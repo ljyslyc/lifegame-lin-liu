@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import {Select,Button} from 'antd';
+import {Select,Button,Tooltip} from 'antd';
 
 const Option = Select.Option;
 
@@ -62,36 +62,44 @@ class LgOperatePanel extends Component{
                 </Select>
                 {
                     !isGameRunning?
-                        <Button
-                            type = "primary"
-                            onClick={this.handleClick_runButton}
-                            style={{width:60}}
-                        >
-                            Run
-                        </Button>
+                        <Tooltip title="Run">
+                            <Button
+                                type = "primary"
+                                onClick={this.handleClick_runButton}
+                                // style={{width:60}}
+                                shape="circle"
+                                icon="caret-right"
+                            />
+                        </Tooltip>
                         :
-                        <Button
-                            type = "default"
-                            onClick={this.handleClick_stopButton}
-                            style={{width:60}}
-                        >
-                            Stop
-                        </Button>
+                        <Tooltip title="Stop">
+                            <Button
+                                type = "default"
+                                onClick={this.handleClick_stopButton}
+                                // style={{width:60}}
+                                shape="circle"
+                                icon="pause"
+                            />
+                        </Tooltip>
                 }
-                <Button
-                    type="default"
-                    onClick={this.props.initEmpty}
-                    style={{marginLeft:20,width:60}}
-                >
-                    Clear
-                </Button>
-                <Button
-                    type="default"
-                    onClick={this.props.initRandom}
-                    style={{marginLeft:20}}
-                >
-                    Random
-                </Button>
+                <Tooltip title="清空">
+                    <Button
+                        type="default"
+                        onClick={this.props.initEmpty}
+                        style={{marginLeft:20}}
+                        shape="circle"
+                        icon="undo"
+                    />
+                </Tooltip>
+                <Tooltip title="随机">
+                    <Button
+                        type="default"
+                        onClick={this.props.initRandom}
+                        style={{marginLeft:20}}
+                        shape="circle"
+                        icon="build"
+                    />
+                </Tooltip>
             </div>
         );
     }

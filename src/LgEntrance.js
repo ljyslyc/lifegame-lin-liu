@@ -20,7 +20,17 @@
              sideColumn:800,    //棋盘的横宽
          };
      }
-     /*开始游戏*/
+     componentWillUpdate(nextProps, nextState, nextContext) {
+         //此时state还未更新为nextState
+         if(this.state.sideRow!==nextState.sideRow){
+             if(this.state.sideColumn!==nextState.sideColumn){
+                 this.initCells_empty(nextState.sideRow,nextState.sideColumn);
+                 console.log("LgEntrance:componentWillUpdate");
+             }
+         }
+     }
+
+    /*开始游戏*/
      runGame=()=>{
 
      };
@@ -29,10 +39,11 @@
 
      };
      /*根据当前棋盘的宽和高，随机初始化Cells二维数组*/
-     initCells_random=()=>{
-         let rowNum=this.state.sideRow/CELL_SIZE;
-         let columnNum=this.state.sideColumn/CELL_SIZE;
+     initCells_random=(sideRow=this.state.sideRow,sideColumn=this.state.sideColumn)=>{
+         let rowNum=sideRow/CELL_SIZE;
+         let columnNum=sideColumn/CELL_SIZE;
          let tempCells=[];
+         console.log("LgEntrance:二维数组cells重新随机计算前",this.state);
          for(let r=0;r<rowNum;r++){
              tempCells[r]=[];
              for(let c=0;c<columnNum;c++){
@@ -42,12 +53,15 @@
                      tempCells[r][c]=false;
              }
          }
-         this.setState({cells:tempCells});
+         console.log("tempCells",tempCells);
+         this.setState({cells:tempCells},()=>{
+             console.log("LgEntrance:二维数组cells重新随机计算后",this.state);
+         });
      };
     /*根据当前棋盘的宽和高，全空初始化Cells二维数组*/
-    initCells_empty=()=>{
-        let rowNum=this.state.sideRow/CELL_SIZE;
-        let columnNum=this.state.sideColumn/CELL_SIZE;
+    initCells_empty=(sideRow=this.state.sideRow,sideColumn=this.state.sideColumn)=>{
+        let rowNum=sideRow/CELL_SIZE;
+        let columnNum=sideColumn/CELL_SIZE;
         let tempCells=[];
         for(let r=0;r<rowNum;r++){
             tempCells[r]=[];
@@ -56,7 +70,7 @@
             }
         }
         this.setState({cells:tempCells},()=>{
-            console.log("Cells has been set empty");
+            console.log("LgEntrance:Cells has been set empty",this.state);
         });
     };
     /*返回生成一个数组，以对象的形式保存当前每个cell的坐标，push至数组中*/
@@ -79,8 +93,20 @@
             sideColumn:nextSide_column,
         });
     };
+    /*由LgCell的onClick事件触发，修改LgEntrance里cells数组里的单个细胞状态*/
+    set_cellState=(c,r)=>{
+        console.log("LgEntrance:set_cellState开始",this.state);
+        let tempCells=this.state.cells;
+        let preState=tempCells[r][c];
+        tempCells[r][c]=!preState;
+        this.setState({cells:tempCells},
+                ()=>{
+                    console.log("LgEntrance:set_cellState",this.state);
+                }
+            );
+    };
     componentWillMount() {
-        this.initCells_random();
+        this.initCells_empty();
     }
 
     render() {
@@ -95,7 +121,7 @@
                          stopGame={this.stopGame}
                          setSide={this.set_sideLength}
                          initEmpty={this.initCells_empty}
-                         initRamdom={this.initCells_random}
+                         initRandom={this.initCells_random}
                      />
                  </div>
                  <br/>
@@ -104,10 +130,11 @@
                      style={{textAlign:'center'}}
                  >
                     <LgEvolutionPanel
-                        cells={this.state.cells}
                         // getCells={this.transfer_cellsOnBoard}
+                        cells={this.state.cells}
                         sideRow={this.state.sideRow}
                         sideColumn={this.state.sideColumn}
+                        flipCellState={this.set_cellState}
                     />
                  </div>
              </div>
