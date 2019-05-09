@@ -24,9 +24,19 @@
          //此时state还未更新为nextState
          if(this.state.sideRow!==nextState.sideRow){
              if(this.state.sideColumn!==nextState.sideColumn){
-                 // 切换尺寸时清空数据
-                 // this.initCells_empty();
-                 console.log("LgEntrance:componentWillUpdate");
+                 // 切换尺寸时清空数据,利用nextState
+                 let rowNum=nextState.sideRow/CELL_SIZE;
+                 let columnNum=nextState.sideColumn/CELL_SIZE;
+                 let tempCells=[];
+                 for(let r=0;r<rowNum;r++){
+                     tempCells[r]=[];
+                     for(let c=0;c<columnNum;c++){
+                         tempCells[r][c]=false;
+                     }
+                 }
+                 this.setState({cells:tempCells},()=>{
+                     console.log("LgEntrance:updated called by sides' changing",this.state);
+                 });
              }
          }
      }
