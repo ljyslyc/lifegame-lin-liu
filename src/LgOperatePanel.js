@@ -33,8 +33,8 @@ class LgOperatePanel extends Component{
                 tempRow=600;
                 tempColumn=800;
                 break;
-            case "600×450":
-                tempRow=450;
+            case "600×400":
+                tempRow=400;
                 tempColumn=600;
                 break;
             case "400×300":
@@ -58,7 +58,7 @@ class LgOperatePanel extends Component{
                     onChange={(v)=>this.handleChange_select(v)}
                 >
                     <Option value={"800×600"}>800 × 600</Option>
-                    <Option value={"600×450"}>600 × 450</Option>
+                    <Option value={"600×400"}>600 × 400</Option>
                     <Option value={"400×300"}>400 × 300</Option>
                 </Select>
                 {

@@ -20,26 +20,6 @@
              sideColumn:800,    //棋盘的横宽
          };
      }
-     componentWillUpdate(nextProps, nextState, nextContext) {
-         //此时state还未更新为nextState
-         if(this.state.sideRow!==nextState.sideRow){
-             if(this.state.sideColumn!==nextState.sideColumn){
-                 // 切换尺寸时清空数据,利用nextState
-                 let rowNum=nextState.sideRow/CELL_SIZE;
-                 let columnNum=nextState.sideColumn/CELL_SIZE;
-                 let tempCells=[];
-                 for(let r=0;r<rowNum;r++){
-                     tempCells[r]=[];
-                     for(let c=0;c<columnNum;c++){
-                         tempCells[r][c]=false;
-                     }
-                 }
-                 this.setState({cells:tempCells},()=>{
-                     console.log("LgEntrance:updated called by sides' changing",this.state);
-                 });
-             }
-         }
-     }
 
     /*开始游戏*/
      runGame=()=>{
@@ -84,24 +64,23 @@
             console.log("LgEntrance:Cells has been set empty",this.state);
         });
     };
-    /*返回生成一个数组，以对象的形式保存当前每个cell的坐标，push至数组中*/
-    // transfer_cellsOnBoard=()=>{
-    //     let temp_array=[];
-    //
-    //     let rowNum=this.state.sideRow/CELL_SIZE;
-    //     let columnNum=this.state.sideColumn/CELL_SIZE;
-    //     for(let r=0;r<rowNum;r++){
-    //         for(let c=0;c<columnNum;c++){
-    //             temp_array.push({c,r});
-    //         }
-    //     }
-    //     return temp_array;
-    // };
-    /*设置棋盘边长*/
+    /*设置棋盘边长，并更新二维数组cells*/
     set_sideLength=(nextSide_row,nextSide_column)=>{
+        let rowNum=nextSide_row/CELL_SIZE;
+        let columnNum=nextSide_column/CELL_SIZE;
+        let tempCells=[];
+        for(let r=0;r<rowNum;r++){
+            tempCells[r]=[];
+            for(let c=0;c<columnNum;c++){
+                tempCells[r][c]=false;
+            }
+        }
+        console.log(nextSide_row,'×',nextSide_column);
+        //只setState一次，不要分两次setState，会过度触发子组件的render及其他生命周期函数
         this.setState({
             sideRow:nextSide_row,
             sideColumn:nextSide_column,
+            cells:tempCells,
         });
     };
     /*由LgCell的onClick事件触发，修改LgEntrance里cells数组里的单个细胞状态*/
