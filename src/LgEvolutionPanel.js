@@ -128,8 +128,8 @@ class LgEvolutionPanel extends Component{
             let rowNum=nextProps.sideRow/CELL_SIZE;
             let columnNum=nextProps.sideColumn/CELL_SIZE;
 
-            /*console.log("LgEvolutionPanel:this.props - ",this.props,"(now Props)");
-            console.log("LgEvolutionPanel:nextProps - ",nextProps,"(next Props)");*/
+            console.log("LgEvolutionPanel:this.props - ",this.props,"(now Props)");
+            console.log("LgEvolutionPanel:nextProps - ",nextProps,"(next Props)");
 
             for(let r=0;r<rowNum;r++){
                 for(let c=0;c<columnNum;c++){

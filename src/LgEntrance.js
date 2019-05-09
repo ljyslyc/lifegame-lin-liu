@@ -1,4 +1,4 @@
- import React,{Component} from 'react'
+ import React,{Component,Fragment} from 'react'
  import LgOperatePanel from "./LgOperatePanel"
  import LgEvolutionPanel from "./LgEvolutionPanel";
 
@@ -24,7 +24,8 @@
          //此时state还未更新为nextState
          if(this.state.sideRow!==nextState.sideRow){
              if(this.state.sideColumn!==nextState.sideColumn){
-                 this.initCells_empty(nextState.sideRow,nextState.sideColumn);
+                 // 切换尺寸时清空数据
+                 // this.initCells_empty();
                  console.log("LgEntrance:componentWillUpdate");
              }
          }
@@ -39,9 +40,9 @@
 
      };
      /*根据当前棋盘的宽和高，随机初始化Cells二维数组*/
-     initCells_random=(sideRow=this.state.sideRow,sideColumn=this.state.sideColumn)=>{
-         let rowNum=sideRow/CELL_SIZE;
-         let columnNum=sideColumn/CELL_SIZE;
+     initCells_random=()=>{
+         let rowNum=this.state.sideRow/CELL_SIZE;
+         let columnNum=this.state.sideColumn/CELL_SIZE;
          let tempCells=[];
          console.log("LgEntrance:二维数组cells重新随机计算前",this.state);
          for(let r=0;r<rowNum;r++){
@@ -59,9 +60,9 @@
          });
      };
     /*根据当前棋盘的宽和高，全空初始化Cells二维数组*/
-    initCells_empty=(sideRow=this.state.sideRow,sideColumn=this.state.sideColumn)=>{
-        let rowNum=sideRow/CELL_SIZE;
-        let columnNum=sideColumn/CELL_SIZE;
+    initCells_empty=()=>{
+        let rowNum=this.state.sideRow/CELL_SIZE;
+        let columnNum=this.state.sideColumn/CELL_SIZE;
         let tempCells=[];
         for(let r=0;r<rowNum;r++){
             tempCells[r]=[];
@@ -111,7 +112,8 @@
 
     render() {
          return(
-             <div>
+             <Fragment>
+                 {console.log("LgEntrance:render()")}
                  <div
                      className="operateP"
                      style={{textAlign:'center'}}
@@ -137,7 +139,7 @@
                         flipCellState={this.set_cellState}
                     />
                  </div>
-             </div>
+             </Fragment>
          );
      }
  }

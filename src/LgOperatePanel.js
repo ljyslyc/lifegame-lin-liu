@@ -1,4 +1,4 @@
-import React,{Component} from 'react'
+import React,{Component,Fragment} from 'react'
 import {Select,Button,Tooltip} from 'antd';
 
 const Option = Select.Option;
@@ -50,7 +50,8 @@ class LgOperatePanel extends Component{
     render() {
         const {isGameRunning} =this.state;
         return(
-            <div>
+            <Fragment>
+                {console.log("LgOperatePanel:render()")}
                 <Select
                     defaultValue={"800×600"}
                     style={{marginRight:20}}
@@ -100,7 +101,7 @@ class LgOperatePanel extends Component{
                         icon="build"
                     />
                 </Tooltip>
-            </div>
+            </Fragment>
         );
     }
 }
