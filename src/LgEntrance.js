@@ -35,7 +35,7 @@
         console.log("LgEntrance:runGame",this.state);
         this.setState({isGameRun:true},()=>{
             //游戏开始后
-            this.id_intervel=window.setInterval(()=>this.updateCells(),500);
+            this.id_intervel=window.setInterval(()=>this.updateCells(),2);
         })
     };
     /*停止游戏*/
@@ -55,7 +55,20 @@
     updateCells=()=>{
         if(this.state.isGameRun){
             // console.log("LgEntrance:updateCells",this.state);
-            let nextCells=this.state.cells;     //下一次的信息，用于保存修改数据
+
+            /*nextCells为空*/
+            let temp_rowNum=this.state.sideRow/CELL_SIZE;
+            let temp_columnNum=this.state.sideColumn/CELL_SIZE;
+            let emptyCells=[];
+            for(let r=0;r<temp_rowNum;r++){
+                emptyCells[r]=[];
+                for(let c=0;c<temp_columnNum;c++){
+                    emptyCells[r][c]=false;
+                }
+            }
+
+
+            let nextCells=emptyCells;           //下一次的信息，用于保存修改数据
             let presentCells=this.state.cells;  //当前的数据信息，作为参考
             let rowNum=this.state.sideRow/CELL_SIZE;
             let columnNum=this.state.sideColumn/CELL_SIZE;
@@ -65,6 +78,7 @@
             for(let r=0;r<rowNum;r++){
                 for(let c=0;c<columnNum;c++){
                     //数活细胞的个数
+                    countCell=0;
                     if(this.between(r-1,0,rowNum)&&this.between(c-1,0,columnNum)){
                         /*(r-1,c-1)左上*/
                         if(presentCells[r-1][c-1])
@@ -118,6 +132,8 @@
                         //当周围有3个以上的存活细胞时，该细胞变成死亡状态
                         if(countCell<2||countCell>3)
                             nextCells[r][c]=false;
+                        else
+                            nextCells[r][c]=true;
                     }
                 }
             }//end of traverse
@@ -131,7 +147,7 @@
         let rowNum=this.state.sideRow/CELL_SIZE;
         let columnNum=this.state.sideColumn/CELL_SIZE;
         let tempCells=[];
-        console.log("LgEntrance:二维数组cells重新随机计算前",this.state);
+
         for(let r=0;r<rowNum;r++){
             tempCells[r]=[];
             for(let c=0;c<columnNum;c++){
@@ -141,10 +157,7 @@
                     tempCells[r][c]=false;
             }
         }
-        console.log("tempCells",tempCells);
-        this.setState({cells:tempCells},()=>{
-            console.log("LgEntrance:二维数组cells重新随机计算后",this.state);
-        });
+        this.setState({cells:tempCells});
     };
     /*根据当前棋盘的宽和高，全空初始化Cells二维数组*/
     initCells_empty=()=>{
@@ -184,7 +197,7 @@
     };
     /*由LgCell的onClick事件触发，修改LgEntrance里cells数组里的单个细胞状态*/
     set_cellState=(c,r)=>{
-        console.log("LgEntrance:set_cellState开始",this.state);
+        // console.log("LgEntrance:set_cellState开始",this.state);
         let tempCells=this.state.cells;
         let preState=tempCells[r][c];
         tempCells[r][c]=!preState;
