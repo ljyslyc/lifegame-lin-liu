@@ -8,7 +8,7 @@ class LgOperatePanel extends Component{
     constructor(props){
         super(props);
         this.state={
-            isGameRunning:false //游戏是否运行中
+            isGameRunning:false                 //游戏是否运行中
         };
         this.setSide=this.props.setSide;        //useless
         this.initEmpty=this.props.initEmpty;    //useless
@@ -19,12 +19,12 @@ class LgOperatePanel extends Component{
     handleClick_runButton=()=>{
         this.setState({isGameRunning:true});
         this.props.runGame();
-        console.log("Game is running");
+        console.log("LgOperatePanel:Game is running");
     };
     handleClick_stopButton=()=>{
         this.setState({isGameRunning:false});
         this.props.stopGame();
-        console.log("Game is stopped");
+        console.log("LgOperatePanel:Game is stopped");
     };
     handleChange_select=(value)=>{
         let tempRow=0,tempColumn=0;
@@ -51,7 +51,7 @@ class LgOperatePanel extends Component{
         const {isGameRunning} =this.state;
         return(
             <Fragment>
-                {console.log("LgOperatePanel:render()")}
+                {console.log("LgOperatePanel:render(state,props)",this.state,this.props)}
                 <Select
                     defaultValue={"800×600"}
                     style={{marginRight:20}}
