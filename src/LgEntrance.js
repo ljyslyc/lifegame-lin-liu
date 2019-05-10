@@ -23,11 +23,12 @@
         this.id_intervel=null;
     }
 
-    shouldComponentUpdate(nextProps, nextState, nextContext) {
-        if(this.state.cells===nextState.cells)
-            return false;
-        return true;
-    }
+    // shouldComponentUpdate(nextProps, nextState, nextContext) {
+    //     if(this.state.cells===nextState.cells)
+    //         return false;
+    //     console.log("LgEntrance:shouldComponentUpdate(thisState,nextState)",this.state,nextState);
+    //     return true;
+    // }
 
     /*开始游戏*/
     runGame=()=>{
@@ -53,7 +54,7 @@
     /*更新当前棋盘*/
     updateCells=()=>{
         if(this.state.isGameRun){
-            console.log("LgEntrance:updateCells",this.state);
+            // console.log("LgEntrance:updateCells",this.state);
             let nextCells=this.state.cells;     //下一次的信息，用于保存修改数据
             let presentCells=this.state.cells;  //当前的数据信息，作为参考
             let rowNum=this.state.sideRow/CELL_SIZE;

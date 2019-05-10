@@ -51,7 +51,7 @@ class LgOperatePanel extends Component{
         const {isGameRunning} =this.state;
         return(
             <Fragment>
-                {console.log("LgOperatePanel:render(state,props)",this.state,this.props)}
+                {/*{console.log("LgOperatePanel:render(state,props)",this.state,this.props)}*/}
                 <Select
                     defaultValue={"800×600"}
                     style={{marginRight:20}}

@@ -128,8 +128,8 @@ class LgEvolutionPanel extends Component{
             let rowNum=nextProps.sideRow/CELL_SIZE;
             let columnNum=nextProps.sideColumn/CELL_SIZE;
 
-            console.log("LgEvolutionPanel:this.props - ",this.props,"(now Props)");
-            console.log("LgEvolutionPanel:nextProps - ",nextProps,"(next Props)");
+            // console.log("LgEvolutionPanel:this.props - ",this.props,"(now Props)");
+            // console.log("LgEvolutionPanel:nextProps - ",nextProps,"(next Props)");
 
             for(let r=0;r<rowNum;r++){
                 for(let c=0;c<columnNum;c++){
@@ -161,7 +161,7 @@ class LgEvolutionPanel extends Component{
                         margin:"auto",
                     }}
                 >
-                    {console.log("LgEvolutionPanel.render前(state,props) ",this.state,this.props)}
+                    {/*{console.log("LgEvolutionPanel.render前(state,props) ",this.state,this.props)}*/}
                     {
                         /*根据cells一维数组渲染棋盘*/
                         cells_onBoard.map(cell =>
@@ -174,7 +174,7 @@ class LgEvolutionPanel extends Component{
                             />
                         )
                     }
-                    {console.log("LgEvolutionPanel.render后(state,props) ",this.state,this.props)}
+                    {/*{console.log("LgEvolutionPanel.render后(state,props) ",this.state,this.props)}*/}
                 </div>
                 <div
                     style={{textAlign:"center",}}
