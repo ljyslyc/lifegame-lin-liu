@@ -51,6 +51,74 @@
     between=(x,lowerLimit,upperLimit)=>{
         return x >= lowerLimit && x <upperLimit;
     };
+    /*计算或邻居数量*/
+    calculateCellNumber=(rowNum,columnNum,r,c,presentCells)=> {
+        let countCell=0;
+        if(this.between(r-1,0,rowNum)&&this.between(c-1,0,columnNum)){
+            /*(r-1,c-1)左上*/
+            if(presentCells[r-1][c-1])
+                countCell++;
+        }
+        if(this.between(r-1,0,rowNum)){
+            /*(r-1,c)上*/
+            if(presentCells[r-1][c])
+                countCell++;
+        }
+        if(this.between(r-1,0,rowNum)&&this.between(c+1,0,columnNum)) {
+            /*(r-1,c+1)右上*/
+            if (presentCells[r-1][c+1])
+                countCell++;
+        }
+        if(this.between(c-1,0,columnNum)){
+            /*(r,c-1)左*/
+            if(presentCells[r][c-1])
+                countCell++;
+        }
+        if(this.between(c+1,0,columnNum)){
+            /*(r,c+1)右*/
+            if(presentCells[r][c+1])
+                countCell++;
+        }
+        if(this.between(r+1,0,rowNum)&&this.between(c-1,0,columnNum)){
+            /*(r+1,c-1)左下*/
+            if(presentCells[r+1][c-1])
+                countCell++;
+        }
+        if(this.between(r+1,0,rowNum)) {
+            /*(r+1,c)下*/
+            if (presentCells[r + 1][c])
+                countCell++;
+        }
+        if(this.between(r+1,0,rowNum)&&this.between(c+1,0,columnNum)){
+            /*(r+1,c+1)右下*/
+            if(presentCells[r+1][c+1])
+                countCell++;
+        }
+        return countCell;
+    };
+    /*判断细胞状态
+    * isalivepresentCell当前细胞状态
+    * countCell当前活邻居细胞数
+    * */
+    judgeCelllife=(isalivepresentCell,countCell)=>{
+        let islife=false;
+        if(!isalivepresentCell) {
+            //当前细胞为死亡状态时，当周围有3个存活细胞时，该细胞变成存活状态
+            if (countCell === 3)
+                islife = true;
+        }
+        else {
+            //当前细胞为存活状态时
+            //当周围低于2个（不包含2个）存活细胞时， 该细胞变成死亡状态
+            //当周围有2个或3个存活细胞时， 该细胞保持原样
+            //当周围有3个以上的存活细胞时，该细胞变成死亡状态
+            if(countCell<2||countCell>3)
+                islife=false;
+            else
+                islife=true;
+        }
+        return islife;
+    };
     /*更新当前棋盘*/
     updateCells=()=>{
         if(this.state.isGameRun){
@@ -66,8 +134,6 @@
                     emptyCells[r][c]=false;
                 }
             }
-
-
             let nextCells=emptyCells;           //下一次的信息，用于保存修改数据
             let presentCells=this.state.cells;  //当前的数据信息，作为参考
             let rowNum=this.state.sideRow/CELL_SIZE;
@@ -78,63 +144,9 @@
             for(let r=0;r<rowNum;r++){
                 for(let c=0;c<columnNum;c++){
                     //数活细胞的个数
-                    countCell=0;
-                    if(this.between(r-1,0,rowNum)&&this.between(c-1,0,columnNum)){
-                        /*(r-1,c-1)左上*/
-                        if(presentCells[r-1][c-1])
-                            countCell++;
-                    }
-                    if(this.between(r-1,0,rowNum)){
-                        /*(r-1,c)上*/
-                        if(presentCells[r-1][c])
-                            countCell++;
-                    }
-                    if(this.between(r-1,0,rowNum)&&this.between(c+1,0,columnNum)) {
-                        /*(r-1,c+1)右上*/
-                        if (presentCells[r-1][c+1])
-                            countCell++;
-                    }
-                    if(this.between(c-1,0,columnNum)){
-                        /*(r,c-1)左*/
-                        if(presentCells[r][c-1])
-                            countCell++;
-                    }
-                    if(this.between(c+1,0,columnNum)){
-                        /*(r,c+1)右*/
-                        if(presentCells[r][c+1])
-                            countCell++;
-                    }
-                    if(this.between(r+1,0,rowNum)&&this.between(c-1,0,columnNum)){
-                        /*(r+1,c-1)左下*/
-                        if(presentCells[r+1][c-1])
-                            countCell++;
-                    }
-                    if(this.between(r+1,0,rowNum)) {
-                        /*(r+1,c)下*/
-                        if (presentCells[r + 1][c])
-                            countCell++;
-                    }
-                    if(this.between(r+1,0,rowNum)&&this.between(c+1,0,columnNum)){
-                        /*(r+1,c+1)右下*/
-                        if(presentCells[r+1][c+1])
-                            countCell++;
-                    }
+                    countCell=this.calculateCellNumber(rowNum,columnNum,r,c,presentCells);
                     //更新
-                    if(!presentCells[r][c]) {
-                        //当前细胞为死亡状态时，当周围有3个存活细胞时，该细胞变成存活状态
-                        if (countCell === 3)
-                            nextCells[r][c] = true;
-                    }
-                    else {
-                        //当前细胞为存活状态时
-                        //当周围低于2个（不包含2个）存活细胞时， 该细胞变成死亡状态
-                        //当周围有2个或3个存活细胞时， 该细胞保持原样
-                        //当周围有3个以上的存活细胞时，该细胞变成死亡状态
-                        if(countCell<2||countCell>3)
-                            nextCells[r][c]=false;
-                        else
-                            nextCells[r][c]=true;
-                    }
+                    nextCells[r][c]=this.judgeCelllife(presentCells[r][c],countCell);
                 }
             }//end of traverse
             this.setState({cells:nextCells});
@@ -244,4 +256,5 @@
          );
      }
  }
+
  export default LgEntrance;

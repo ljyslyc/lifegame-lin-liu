@@ -105,5 +105,4 @@ class LgOperatePanel extends Component{
         );
     }
 }
-
 export default LgOperatePanel;
